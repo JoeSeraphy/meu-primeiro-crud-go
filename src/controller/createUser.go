@@ -5,9 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/logger"
-	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/validation"
-	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/request"
-	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/response"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/model/request"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/model/response"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/validation"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/model"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/service"
 	"go.uber.org/zap"
 )
 
@@ -24,6 +26,18 @@ func CreateUser(c *gin.Context) {
 		c.JSON(errRest.Code, errRest)
 		return
 	}
+
+	domain := model.NewUserDomain(userRequest.Email,
+		userRequest.Password,
+		userRequest.Name,
+		userRequest.Age,
+	)
+	service := service.NewDomainService()
+	if err := service.CreateUser(domain); err != nil {
+		c.JSON(err.Code, err)
+		return
+	}
+
 	fmt.Println(userRequest)
 	response := response.UserResponse{
 		ID:    "test",
