@@ -16,9 +16,11 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	service := service.NewUserDomainService()
+	userController := controller.NewUserController(service)
 	router := gin.Default()
 
-	routes.InitRoutes(&router.RouterGroup)
+	routes.InitRoutes(&router.RouterGroup, userController)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatal("Failed to run server: ", err)

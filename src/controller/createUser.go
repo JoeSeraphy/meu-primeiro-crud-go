@@ -9,11 +9,11 @@ import (
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/model/response"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/validation"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/model"
-	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/service"
+
 	"go.uber.org/zap"
 )
 
-func CreateUser(c *gin.Context) {
+func (uc *userController) CreateUser(c *gin.Context) {
 	logger.Info("Init CreateUser Controller",
 		zap.String("Journey", "createUser"))
 	var userRequest request.UserRequest
@@ -27,13 +27,14 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	domain := model.NewUserDomain(userRequest.Email,
+	domain := model.NewUserDomain(
+		userRequest.Email,
 		userRequest.Password,
 		userRequest.Name,
 		userRequest.Age,
 	)
-	service := service.NewDomainService()
-	if err := service.CreateUser(domain); err != nil {
+
+	if err := uc.serviceInterface.CreateUser(domain); err != nil {
 		c.JSON(err.Code, err)
 		return
 	}
