@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: username       # <--- Deve bater com a string do Go
+      POSTGRES_PASSWORD: password   # <--- Deve bater com a string do Go
+      POSTGRES_DB: first-crud       # <--- Deve bater com a string do Go
+    ports:
+      - "5432:5432"

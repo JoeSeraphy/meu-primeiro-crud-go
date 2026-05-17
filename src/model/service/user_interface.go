@@ -1,15 +1,18 @@
-package model
+package service
 
 import (
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/rest_err"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/model"
 )
 
-func NewUserDomainService() UserDomainService {
-	return &userDomainService{}
+func NewUserDomainService(
+	userRepository repository.UserRepository
+) UserDomainService {
+	return &userDomainService{userRepository}
 }
 
 type userDomainService struct {
+	userRepository repository.UserRepository
 }
 
 type UserDomainService interface {

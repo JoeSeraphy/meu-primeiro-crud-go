@@ -1,8 +1,11 @@
 package view
 
-import "github.com/joeseraphy/meu-primeiro-crud-go/src/controller/model/response"	
+import (
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/model/response"	
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/model"
+)
 
-func convertDomainToResponse(
+func ConvertDomainToResponse(
 	userDomain model.UserDomainInterface,
 ) response.UserResponse {
 	return response.UserResponse{

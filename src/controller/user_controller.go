@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	service "github.com/joeseraphy/meu-primeiro-crud-go/src/service"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/service"
 
 )	
 func NewUserController(
@@ -23,5 +23,5 @@ type UserControllerInterface interface {
 }
 
 type userController struct {
-
+	serviceInterface service.UserDomainService
 }

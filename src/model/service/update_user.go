@@ -1,4 +1,4 @@
-package model
+package service
 
 import (
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/rest_err"

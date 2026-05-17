@@ -2,11 +2,14 @@ package main
 
 import (
 	"log"
-
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/logger"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/routes"
 	"github.com/joho/godotenv"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/service"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/database/postgre"
 )
 
 func main() {
@@ -16,8 +19,14 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	database, err :=postgre.NewPostgreConnection(context.Background())
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v \n", err.Error())
+		return
+	}
+
 	service := service.NewUserDomainService()
-	userController := controller.NewUserController(service)
+	userController := initDependecies(database)
 	router := gin.Default()
 
 	routes.InitRoutes(&router.RouterGroup, userController)
