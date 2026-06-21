@@ -2,35 +2,49 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"os"
+
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/logger"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/rest_err"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/model"
-	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/rest_errors"
-	"github.com/joelsantiago/meu-primeiro-crud-go/src/model/repository/entity/convert"
+	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/repository/entity/convert"
 )
 
 const (
-		POSTGRE_USER_DB = "POSTGRESQL_USER_DB"
+	POSTGRE_USER_DB = "POSTGRESQL_USER_DB"
 )
 
 func (ur *userRepository) CreateUser(UserDomain model.UserDomainInterface,
-		) (model.UserDomainInterface, *rest_errors.RestErr) {
+) (model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Creating user in repository...")
+	tableName := os.Getenv(POSTGRE_USER_DB)
+	if tableName == "" {
+		tableName = "users"
+	}
+	value := convert.ConvertDomainToEntity(UserDomain)
 
-			logger.Info("Creating user in repository...")
-			collection_name := os.Getenv(POSTGRE_USER_DB)
+	query := fmt.Sprintf(`
+				INSERT INTO %s (email, password, name, age)
+				VALUES ($1, $2, $3, $4) 
+				RETURNING id`, tableName)
 
-			collection := ur.databaseConnection.Collection(collection_name)
+	var lastInsertID string
+	err := ur.databaseConnection.QueryRow(
+		context.Background(),
+		query,
+		value.Email,
+		value.Password,
+		value.Name,
+		value.Age,
+	).Scan(&lastInsertID)
 
-			value := convert.ConvertDomainToEntity(UserDomain)
-			if err != nil {
-				return nil, rest_errors.NewInternalServerError(err.Error())
-			}
-			result, err := collection.InsertOne(context.Background(), value)
-			if err != nil {
-				return nil, rest_errors.NewInternalServerError(err.Error())
-			}
+	if err != nil {
+		logger.Error("Error creating user in repository", err)
+		return nil, rest_err.NewInternalServerError(err.Error())
+	}
 
-			userDomain.SetID(result.InsertedID.(string))
+	value.ID = lastInsertID
 
-			return userDomain, nil
-		}
+	return convert.ConvertEntityToDomain(value), nil
+}

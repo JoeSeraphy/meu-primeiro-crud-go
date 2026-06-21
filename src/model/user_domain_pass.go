@@ -2,7 +2,7 @@ package model
 
 import (
 	"crypto/md5"
-	"fmt"
+	"encoding/hex"
 )
 
 func (ud *userDomain) EncryptPassword() {

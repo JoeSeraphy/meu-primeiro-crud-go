@@ -1,12 +1,13 @@
 package model
 
+
 type UserDomainInterface interface {
 	GetEmail() string
 	GetPassword() string
 	GetName() string
 	GetAge() int8
 	EncryptPassword()
-	GetJSONValue() (string, error)
+	GetId() string
 	SetID(id string)
 }
 

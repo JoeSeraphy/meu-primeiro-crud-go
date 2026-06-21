@@ -1,23 +1,25 @@
 package postgre
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"os"
+
 	"github.com/jackc/pgx/v5"
 )
 
 var (
-	POSTGRES_URL = "POSTGRES_URL"
+	POSTGRES_URL     = "POSTGRES_URL"
 	POSTGRES_USER_DB = "POSTGRES_USER_DB"
 )
 
 func NewPostgreConnection(
 	ctx context.Context,
 ) (*pgx.Conn, error) {
-		postgreURL := os.Getenv(POSTGRES_URL)
-		userDB := os.Getenv(POSTGRES_USER_DB)
-	conn, err := pgx.Connect(ctx, postgreURL, userDB)
+	postgreURL := os.Getenv(POSTGRES_URL)
+	userDB := os.Getenv(POSTGRES_USER_DB)
+	postDB_URL := postgreURL + " " + userDB
+	conn, err := pgx.Connect(ctx, postDB_URL)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		return nil, err
@@ -34,5 +36,5 @@ func NewPostgreConnection(
 	fmt.Println(name, weight)
 
 	return conn, nil
-	
+
 }

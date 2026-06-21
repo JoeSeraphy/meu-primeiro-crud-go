@@ -2,15 +2,19 @@ package model
 
 
 type userDomain struct {
-	ID	     string
+	id	     string
 	email    string 
 	password string
 	name     string
 	age      int8
 }
 
+func (ud *userDomain) GetId() string {
+	return ud.id
+}
+
 func (ud *userDomain) SetID(id string) {
-	ud.ID = id
+	ud.id = id
 }
 
 func (ud *userDomain) GetEmail() string {

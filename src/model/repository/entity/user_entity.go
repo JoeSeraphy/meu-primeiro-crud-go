@@ -1,10 +1,9 @@
 package entity
 
-
-type UserDomain struct {
-	ID	     string
-	email    string 
-	password string
-	name     string
-	age      int8
+type UserEntity struct {
+	ID	     string `psql:"_id,omitempty"`
+	Email    string `psql:"email"`
+	Password string `psql:"password"`
+	Name     string `psql:"name"`
+	Age      int8   `psql:"age"`
 }

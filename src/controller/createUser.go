@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/logger"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/controller/model/request"
@@ -32,16 +32,18 @@ func (uc *userController) CreateUser(c *gin.Context) {
 		userRequest.Age,
 	)
 
-	domainResult, err := uc.serviceInterface.CreateUser(domain)
+	domainResult, err := uc.serviceInterface.CreateUserServices(domain)
 	if err != nil {
 		logger.Error("Error trying to create user in service", err,
-			zap.String("Journey", "createUser"))	
+			zap.String("Journey", "createUser"))
 		c.JSON(err.Code, err)
 		return
 	}
-	logger.Info("User created successfully", 
-	zap.String("userId", domainResult.GetId()),
-	zap.String("Journey", "createUser"))
+	// domainResult is a pointer to an interface; dereference to call its methods
+	domainResp := *domainResult
+	logger.Info("User created successfully",
+		zap.String("userId", domainResp.GetId()),
+		zap.String("Journey", "createUser"))
 	c.JSON(http.StatusOK, view.ConvertDomainToResponse(
-		domain,))
+		domainResp))
 }
