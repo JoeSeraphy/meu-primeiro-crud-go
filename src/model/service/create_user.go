@@ -18,5 +18,9 @@ func (ud *userDomainService) CreateUserServices(
 			zap.String("journey", "CreateUser"))
 		return nil, err
 	}
+	logger.Info("createUser service executed successfully",
+		zap.String("userId", userDomainRepository.GetId()),
+		zap.String("journey", "CreateUser"))
+
 	return &userDomainRepository, nil
 }

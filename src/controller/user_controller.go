@@ -3,13 +3,13 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/model/service"
+)
 
-)	
-func NewUserController(
+func NewUserControllerInterface(
 	serviceInterface service.UserDomainService,
 ) UserControllerInterface {
-	return &userController{
-		serviceInterface: serviceInterface,
+	return &userControllerInterface{
+		service: serviceInterface,
 	}
 }
 
@@ -22,6 +22,8 @@ type UserControllerInterface interface {
 	FindUserByEmail(c *gin.Context)
 }
 
-type userController struct {
-	serviceInterface service.UserDomainService
+type userControllerInterface struct {
+	service service.UserDomainService
 }
+
+// UpdateUser implements [UserControllerInterface].

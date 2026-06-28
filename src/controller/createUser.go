@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (uc *userController) CreateUser(c *gin.Context) {
+func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	logger.Info("Init CreateUser Controller",
 		zap.String("Journey", "createUser"))
 	var userRequest request.UserRequest
@@ -32,7 +32,7 @@ func (uc *userController) CreateUser(c *gin.Context) {
 		userRequest.Age,
 	)
 
-	domainResult, err := uc.serviceInterface.CreateUserServices(domain)
+	domainResult, err := uc.service.CreateUserServices(domain)
 	if err != nil {
 		logger.Error("Error trying to create user in service", err,
 			zap.String("Journey", "createUser"))

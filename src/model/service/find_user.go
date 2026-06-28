@@ -18,5 +18,6 @@ func (ud *userDomainService) FindUserByEmailServices(email string) (
 	model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Finding user by email in service...",
 		zap.String("journey", "findUserByEmail"))
+
 	return ud.userRepository.FindUserByEmail(email)
 }

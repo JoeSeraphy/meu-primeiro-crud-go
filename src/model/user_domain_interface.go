@@ -1,6 +1,5 @@
 package model
 
-
 type UserDomainInterface interface {
 	GetEmail() string
 	GetPassword() string
@@ -19,5 +18,12 @@ func NewUserDomain(email, password,
 		password: password,
 		name:     name,
 		age:      age,
+	}
+}
+
+func NewUserUpdateDomain(name string, age int8) UserDomainInterface {
+	return &userDomain{
+		name: name,
+		age:  age,
 	}
 }

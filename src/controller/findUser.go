@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (uc *userController) FindUserByID(c *gin.Context) {
+func (uc *userControllerInterface) FindUserByID(c *gin.Context) {
 	logger.Info("Init FindUserByID Controller",
 		zap.String("Journey", "findUserByID"))
 
@@ -26,7 +26,7 @@ func (uc *userController) FindUserByID(c *gin.Context) {
 		c.JSON(errorMessage.Code, errorMessage)
 		return
 	}
-	userDomain, err := uc.serviceInterface.FindUserByIDServices(userId)
+	userDomain, err := uc.service.FindUserByIDServices(userId)
 	if err != nil {
 		logger.Error("Error trying to find user by ID in service", err,
 			zap.String("Journey", "findUserByID"))
@@ -39,7 +39,7 @@ func (uc *userController) FindUserByID(c *gin.Context) {
 		userDomain,
 	))
 }
-func (uc *userController) FindUserByEmail(c *gin.Context) {
+func (uc *userControllerInterface) FindUserByEmail(c *gin.Context) {
 	logger.Info("Init FindUserByEmail Controller",
 		zap.String("Journey", "findUserByEmail"))
 
@@ -53,7 +53,7 @@ func (uc *userController) FindUserByEmail(c *gin.Context) {
 		c.JSON(errorMessage.Code, errorMessage)
 		return
 	}
-	userDomain, err := uc.serviceInterface.FindUserByEmailServices(userEmail)
+	userDomain, err := uc.service.FindUserByEmailServices(userEmail)
 	if err != nil {
 		logger.Error("Error trying to find user by email in service", err,
 			zap.String("Journey", "findUserByEmail"))
