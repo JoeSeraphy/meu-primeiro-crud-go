@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (uc *UserControllerInterface) UpdateUser(c *gin.Context) {
+func (uc *userControllerInterface) UpdateUser(c *gin.Context) {
 	logger.Info("Init UpdateUser Controller",
 		zap.String("Journey", "updateUser"))
 	var userUpdateRequest request.UserUpdateRequest
@@ -32,7 +32,7 @@ func (uc *UserControllerInterface) UpdateUser(c *gin.Context) {
 		userUpdateRequest.Name,
 		userUpdateRequest.Age,
 	)
-	err := uc.service.UpdateUserServices(userId, domain)
+	err := uc.service.UpdateUser(userId, domain)
 	if err != nil {
 		logger.Error("Error trying to update user", err,
 			zap.String("Journey", "updateUser"))

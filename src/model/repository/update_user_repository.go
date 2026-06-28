@@ -15,7 +15,7 @@ import (
 func (ur *userRepository) UpdateUser(
 	userId string,
 	UserDomain model.UserDomainInterface,
-) (model.UserDomainInterface, *rest_err.RestErr) {
+) *rest_err.RestErr {
 	logger.Info("Updating user in repository...",
 		zap.String("journey", "updateUser"))
 	tableName := os.Getenv(POSTGRE_USER_DB)
@@ -38,15 +38,14 @@ func (ur *userRepository) UpdateUser(
 		value.Password,
 		value.Name,
 		value.Age,
-		value.ID,
 	).Scan(&lastInsertID)
 
 	if err != nil {
 		logger.Error("Error updating user in repository", err)
-		return nil, rest_err.NewInternalServerError(err.Error())
+		return rest_err.NewInternalServerError(err.Error())
 	}
 
 	value.ID = lastInsertID
 
-	return convert.ConvertEntityToDomain(value), nil
+	return nil
 }

@@ -7,10 +7,10 @@ import (
 )
 
 func NewUserRepository(
-	databaseConnection pgx.Conn,
-) userRepository {
-	return userRepository{
-		databaseConnection: &databaseConnection,
+	databaseConnection *pgx.Conn,
+) UserRepository {
+	return &userRepository{
+		databaseConnection: databaseConnection,
 	}
 }
 
@@ -23,10 +23,7 @@ type UserRepository interface {
 	CreateUser(UserDomain model.UserDomainInterface,
 	) (model.UserDomainInterface, *rest_err.RestErr)
 
-	UpdateUser(
-		userId string,
-		UserDomain model.UserDomainInterface,
-	) *rest_err.RestErr
+	UpdateUser(userId string, UserDomain model.UserDomainInterface) *rest_err.RestErr
 
 	FindUserByEmail(email string) (model.UserDomainInterface, *rest_err.RestErr)
 
