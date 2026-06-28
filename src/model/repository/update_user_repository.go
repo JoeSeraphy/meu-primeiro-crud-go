@@ -26,18 +26,17 @@ func (ur *userRepository) UpdateUser(
 
 	query := fmt.Sprintf(`
 				UPDATE %s 
-				SET email = $1, password = $2, name = $3, age = $4
-				WHERE id = $5
+				SET  name = $1, age = $2
+				WHERE id = $3
 				RETURNING id`, tableName)
 
 	var lastInsertID string
 	err := ur.databaseConnection.QueryRow(
 		context.Background(),
 		query,
-		value.Email,
-		value.Password,
 		value.Name,
 		value.Age,
+		userId,
 	).Scan(&lastInsertID)
 
 	if err != nil {

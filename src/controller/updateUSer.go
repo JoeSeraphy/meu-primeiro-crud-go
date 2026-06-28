@@ -15,12 +15,19 @@ import (
 func (uc *userControllerInterface) UpdateUser(c *gin.Context) {
 	logger.Info("Init UpdateUser Controller",
 		zap.String("Journey", "updateUser"))
+
 	var userUpdateRequest request.UserUpdateRequest
 
-	userId := c.Param("id")
+	userId := c.Param("userId")
 
-	if err := c.ShouldBindJSON(&userUpdateRequest); err != nil ||
-		strings.TrimSpace(userId) == "" {
+	if strings.TrimSpace(userId) == "" {
+		logger.Error("Error: userId is empty", nil,
+			zap.String("Journey", "updateUser"))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "userId is required"})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&userUpdateRequest); err != nil {
 		logger.Error("Error trying to validate user update request", err,
 			zap.String("Journey", "updateUser"))
 		errRest := validation.ValidateUserError(err)
@@ -32,6 +39,7 @@ func (uc *userControllerInterface) UpdateUser(c *gin.Context) {
 		userUpdateRequest.Name,
 		userUpdateRequest.Age,
 	)
+
 	err := uc.service.UpdateUser(userId, domain)
 	if err != nil {
 		logger.Error("Error trying to update user", err,
@@ -39,6 +47,7 @@ func (uc *userControllerInterface) UpdateUser(c *gin.Context) {
 		c.JSON(err.Code, err)
 		return
 	}
+
 	logger.Info("updateUser controller executed successfully",
 		zap.String("userId", userId),
 		zap.String("Journey", "updateUser"))
