@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/google/uuid"
+
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/logger"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/configuration/rest_err"
 	"github.com/joeseraphy/meu-primeiro-crud-go/src/model"
@@ -25,14 +27,16 @@ func (ur *userRepository) CreateUser(UserDomain model.UserDomainInterface,
 	value := convert.ConvertDomainToEntity(UserDomain)
 
 	query := fmt.Sprintf(`
-				INSERT INTO %s (email, password, name, age)
-				VALUES ($1, $2, $3, $4) 
+				INSERT INTO %s (id, email, password, name, age)
+				VALUES ($1, $2, $3, $4, $5) 
 				RETURNING id`, tableName)
 
+	userId := uuid.NewString()
 	var lastInsertID string
 	err := ur.databaseConnection.QueryRow(
 		context.Background(),
 		query,
+		userId,
 		value.Email,
 		value.Password,
 		value.Name,

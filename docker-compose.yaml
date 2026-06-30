@@ -1,9 +1,17 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:15-alpine
+    container_name: first-crud
     environment:
-      POSTGRES_USER: username       # <--- Deve bater com a string do Go
-      POSTGRES_PASSWORD: password   # <--- Deve bater com a string do Go
-      POSTGRES_DB: first-crud       # <--- Deve bater com a string do Go
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=senha123
+      - POSTGRES_DB=first_crud
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

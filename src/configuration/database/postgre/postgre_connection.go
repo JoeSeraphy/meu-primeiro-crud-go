@@ -9,18 +9,15 @@ import (
 )
 
 var (
-	POSTGRES_URL     = "POSTGRES_URL"
-	POSTGRES_USER_DB = "POSTGRES_USER_DB"
+	POSTGRES_URL = "POSTGRES_URL"
 )
 
 func NewPostgreConnection(
 	ctx context.Context,
 ) (*pgx.Conn, error) {
 	postgreURL := os.Getenv(POSTGRES_URL)
-	userDB := os.Getenv(POSTGRES_USER_DB)
-	postDB_URL := fmt.Sprintf("%s/%s?sslmode=disable", postgreURL, userDB)
 
-	conn, err := pgx.Connect(ctx, postDB_URL)
+	conn, err := pgx.Connect(ctx, postgreURL)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		return nil, err
